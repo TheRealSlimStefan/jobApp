@@ -1,0 +1,13 @@
+{
+    "users": [
+        {
+            "id": 1,
+            "name": "Andrzej",
+            "surname": "Gołota",
+            "email": "a.golota@gmail.com",
+            "password": "cioswjaja",
+            "date": "descripion",
+            "photos": []
+        }
+    ]
+}
