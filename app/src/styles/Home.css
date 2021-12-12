@@ -1,0 +1,17 @@
+.Home {
+    min-height: 100vh;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-around;
+    padding: 50px 0;
+}
+
+.Home button {
+    background-color: #66a9ff;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    padding: 15px 20px;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+}
