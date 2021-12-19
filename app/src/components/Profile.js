@@ -1,6 +1,8 @@
 import "../styles/Profile.css";
 import { useNavigate, Navigate } from "react-router-dom";
 import { BiLogOut } from "react-icons/bi";
+import { AiFillEdit } from "react-icons/ai";
+import profileImg from '../images/default_image.png'
 
 function Profile({ logged, setUser, setLogged }) {
     let navigate = useNavigate();
@@ -8,16 +10,27 @@ function Profile({ logged, setUser, setLogged }) {
 
     return (
         <>
+
             <div className="Profile">
-                <button
+                <button 
+                    className='logout_btn'
                     onClick={() => {
                         setUser({});
                         navigate("/");
                         setLogged(false);
                     }}
-                >
-                    <BiLogOut />
+                    >
+                    <BiLogOut/>
                 </button>
+
+                <img src={profileImg} className='profile_img' alt='profile'></img>
+                <a className='edit_profile_btn' onClick={() => {}} href='#'>
+                    <AiFillEdit/>
+                    <p>Edutuj profil</p>
+                </a>
+                <div>
+
+                </div>
             </div>
         </>
     );

@@ -24,7 +24,6 @@ function App() {
     return (
         <div className="App">
             <Router>
-                {logged && <Navbar />}
                 <Routes>
                     <Route
                         path="/search"
@@ -63,6 +62,7 @@ function App() {
                 <Route path="/highlight/:id" element={<Highlight />} /> */}
                     <Route path="*" element={<ErrorPage />} />
                 </Routes>
+                {logged && <Navbar />}
             </Router>
         </div>
     );
