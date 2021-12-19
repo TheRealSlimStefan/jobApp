@@ -14,6 +14,10 @@ app.use(
     })
 );
 
+app.get("/", (req, res) => {
+    res.send("Server with orders");
+});
+
 app.post("/register", (req, res) => {
     const newUser = {
         id: Math.floor(Math.random() * (100000 - 1)) + 1,
