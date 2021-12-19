@@ -1,9 +1,9 @@
 import "../styles/Login.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Navigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
 
-function Login({ setLogged, setUser }) {
+function Login({ setLogged, setUser, logged }) {
     let navigate = useNavigate();
 
     let [email, setEmail] = useState("");
@@ -30,6 +30,8 @@ function Login({ setLogged, setUser }) {
                 navigate("/");
             });
     }
+
+    if (logged) return <Navigate to="/search" />;
 
     return (
         <div className="Login">

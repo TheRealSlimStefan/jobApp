@@ -1,10 +1,10 @@
 import "../styles/Register.css";
-import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useNavigate, Navigate } from "react-router-dom";
+import { useState } from "react";
 import axios from "axios";
 import Error from "./Error";
 
-function Register() {
+function Register({ logged }) {
     let navigate = useNavigate();
 
     let [name, setName] = useState("");
@@ -77,6 +77,9 @@ function Register() {
                 });
         }
     }
+
+    console.log(logged);
+    if (logged) return <Navigate to="/search" />;
 
     return (
         <div className="Register">

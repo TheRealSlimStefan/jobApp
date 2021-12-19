@@ -1,4 +1,4 @@
-.Home {
+.Search {
     min-height: 100vh;
     display: flex;
     align-items: flex-start;
@@ -6,7 +6,7 @@
     padding: 50px 0;
 }
 
-.Home button {
+.Search button {
     background-color: #66a9ff;
     border: none;
     border-radius: 5px;
