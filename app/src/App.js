@@ -58,8 +58,7 @@ function App() {
                         path="/register"
                         element={<Register logged={logged} />}
                     />
-                    {/*<Route path="/teams" element={<Teams />} />
-                <Route path="/statistics" element={<Statistics />} />
+                    {/*<Route path="/statistics" element={<Statistics />} />
                 <Route path="/highlight/:id" element={<Highlight />} /> */}
                     <Route path="*" element={<ErrorPage />} />
                 </Routes>
