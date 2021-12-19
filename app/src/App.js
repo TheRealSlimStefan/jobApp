@@ -28,14 +28,7 @@ function App() {
                 <Routes>
                     <Route
                         path="/search"
-                        element={
-                            <Search
-                                logged={logged}
-                                user={user}
-                                setLogged={setLogged}
-                                setUser={setUser}
-                            />
-                        }
+                        element={<Search logged={logged} user={user} />}
                     />
                     <Route
                         path="/chats"
@@ -43,7 +36,14 @@ function App() {
                     />
                     <Route
                         path="/profile"
-                        element={<Profile logged={logged} user={user} />}
+                        element={
+                            <Profile
+                                logged={logged}
+                                user={user}
+                                setUser={setUser}
+                                setLogged={setLogged}
+                            />
+                        }
                     />
                     <Route
                         path="/login"
