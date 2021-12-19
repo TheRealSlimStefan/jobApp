@@ -6,6 +6,6 @@
     padding: 50px 0;
 }
 
-.App div:nth-last-child(1) {
+.App .Navbar + div {
     flex-grow: 1;
 }

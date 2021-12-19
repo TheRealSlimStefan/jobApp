@@ -4,7 +4,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 50px 0;
+    /* padding: 50px 0; */
 }
 
 .Login .loginPanel {
@@ -37,6 +37,7 @@
 .Login .buttonsContainer {
     display: flex;
     justify-content: space-between;
+    flex-grow: 0;
 }
 
 .Login .buttonsContainer button {
