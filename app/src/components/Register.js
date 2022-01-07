@@ -1,11 +1,13 @@
 import "../styles/Register.css";
 import { useNavigate, Navigate } from "react-router-dom";
 import { useState } from "react";
+import { useAuth } from "../contexts/AuthContext";
 import axios from "axios";
 import Error from "./Error";
 
 function Register({ logged }) {
     let navigate = useNavigate();
+    const { register } = useAuth();
 
     let [name, setName] = useState("");
     let [surname, setSurname] = useState("");
@@ -13,77 +15,112 @@ function Register({ logged }) {
     let [password, setPassword] = useState("");
     let [repeatedPassword, setRepeatedPassword] = useState("");
     let [accountType, setAccountType] = useState("employee");
+    let [loading, setLoading] = useState(false);
 
-    let [emptyNameField, setEmptyNameField] = useState(false);
-    let [emptySurnameField, setEmptySurnameField] = useState(false);
-    let [emptyEmailField, setEmptyEmailField] = useState(false);
-    let [emptyPasswordField, setEmptyPasswordField] = useState(false);
-    let [differentPasswords, setDifferentPasswords] = useState(false);
+    let [error, setError] = useState({ error: false, info: "" });
 
     function handleNameInput(e) {
-        setEmptyNameField(false);
+        setError({ error: false, info: "" });
         setName(e.target.value);
     }
 
     function handleSurnameInput(e) {
-        setEmptySurnameField(false);
+        setError({ error: false, info: "" });
         setSurname(e.target.value);
     }
 
     function handleEmailInput(e) {
+        setError({ error: false, info: "" });
         setEmail(e.target.value);
-        setEmptyEmailField(false);
     }
 
     function handlePasswordInput(e) {
+        setError({ error: false, info: "" });
         setPassword(e.target.value);
-        setEmptyPasswordField(false);
     }
 
     function handleRepeatedPasswordInput(e) {
+        setError({ error: false, info: "" });
         setRepeatedPassword(e.target.value);
-        setDifferentPasswords(false);
     }
 
     function handleRadioButtonInput(e) {
+        setError({ error: false, info: "" });
         console.log(e.target.value);
-        setAccountType(e.target.value);
     }
 
-    function register() {
-        setEmptyNameField(false);
-        setEmptySurnameField(false);
-        setEmptyEmailField(false);
-        setEmptyPasswordField(false);
-        setDifferentPasswords(false);
+    async function registerNewUser() {
+        setError({ error: false, info: "" });
 
-        if (name.length === 0) setEmptyNameField(true);
-        else if (surname.length === 0) setEmptySurnameField(true);
-        else if (email.length === 0) setEmptyEmailField(true);
-        else if (password.length === 0) setEmptyPasswordField(true);
-        else if (password !== repeatedPassword) setDifferentPasswords(true);
+        if (name.length < 6)
+            setError({
+                error: true,
+                info: "Pole imie nie może być puste!",
+            });
+        else if (surname.length === 0)
+            setError({
+                error: true,
+                info: "Pole nazwisko nie może być puste!",
+            });
+        else if (email.length === 0)
+            setError({
+                error: true,
+                info: "Pole email nie może być puste!",
+            });
+        else if (password.length === 0)
+            setError({
+                error: true,
+                info: "Pole hasło nie może być puste!",
+            });
+        else if (password.length < 6)
+            setError({
+                error: true,
+                info: "Hasło musi mieć przynajmniej 6 znaków!",
+            });
+        else if (password !== repeatedPassword)
+            setError({
+                error: true,
+                info: "Hasła nie są takie same!",
+            });
         else {
-            axios
-                .post("http://localhost:3001/register", {
-                    name: name,
-                    surname: surname,
-                    email: email,
-                    password: password,
-                    accountType: "employee",
-                })
-                .then((response) => {
-                    // console.log(response);
-                    navigate("/");
+            try {
+                setLoading(true);
+                await register(email, password);
+                navigate("/");
+            } catch {
+                setError({
+                    error: true,
+                    info: "Nie udało się stworzyć konta...",
                 });
+            }
+            setLoading(false);
+
+            return () => {
+                setLoading(false);
+            };
+
+            // axios
+            //     .post("http://localhost:3001/register", {
+            //         name: name,
+            //         surname: surname,
+            //         email: email,
+            //         password: password,
+            //         accountType: "employee",
+            //     })
+            //     .then((response) => {
+            //         // console.log(response);
+            //         navigate("/");
+            //     });
         }
     }
 
-    console.log(logged);
-    if (logged) return <Navigate to="/search" />;
+    // console.log(logged);
+    // if (logged) return <Navigate to="/search" />;
 
     return (
         <div className="Register">
             <div className="registerPanel">
+                <h2>Zarejestruj się</h2>
                 <div className="inputContainer">
                     <input
                         placeholder="imie..."
@@ -144,30 +181,12 @@ function Register({ logged }) {
                         Szukam pracownika
                     </label>
                 </div>
-                <Error
-                    error={emptyNameField}
-                    info={"Pole imie nie może być puste!"}
-                />
-                <Error
-                    error={emptySurnameField}
-                    info={"Pole nazwisko nie może być puste!"}
-                />
-                <Error
-                    error={emptyEmailField}
-                    info={"Pole email nie może być puste!"}
-                />
-                <Error
-                    error={emptyPasswordField}
-                    info={"Pole hasło nie może być puste!"}
-                />
-                <Error
-                    error={differentPasswords}
-                    info={"Hasła nie są takie same!"}
-                />
+                <Error error={error.error} info={error.info} />
                 <div className="buttonsContainer">
                     <button
+                        disabled={loading}
                         className="registerButton"
-                        onClick={() => register()}
+                        onClick={() => registerNewUser()}
                     >
                         Zarejestruj się
                     </button>

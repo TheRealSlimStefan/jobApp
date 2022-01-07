@@ -1,10 +1,16 @@
 import "../styles/Login.css";
-import { useNavigate, Navigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
 import { useState } from "react";
 import axios from "axios";
+import Error from "./Error";
 
 function Login({ setLogged, setUser, logged }) {
     let navigate = useNavigate();
+    const { login } = useAuth();
+
+    let [loginError, setLoginError] = useState(false);
+    let [loading, setLoading] = useState(false);
 
     let [email, setEmail] = useState("");
     let [password, setPassword] = useState("");
@@ -17,25 +23,39 @@ function Login({ setLogged, setUser, logged }) {
         setPassword(e.target.value);
     }
 
-    function login() {
-        axios
-            .post("http://localhost:3001/login", {
-                email: email,
-                password: password,
-            })
-            .then((response) => {
-                console.log(response.data);
-                setUser(response.data);
-                setLogged(true);
-                navigate("/");
-            });
+    async function loginUser() {
+        setLoginError(false);
+
+        try {
+            setLoading(true);
+            await login(email, password);
+            navigate("/");
+        } catch {
+            setLoginError(true);
+        }
+        return () => {
+            setLoading(false);
+        };
+
+        // axios
+        //     .post("http://localhost:3001/login", {
+        //         email: email,
+        //         password: password,
+        //     })
+        //     .then((response) => {
+        //         console.log(response.data);
+        //         setUser(response.data);
+        //         setLogged(true);
+        //         navigate("/");
+        //     });
     }
 
-    if (logged) return <Navigate to="/search" />;
+    // if (logged) return <Navigate to="/search" />;
 
     return (
         <div className="Login">
             <div className="loginPanel">
+                <h2>Zaloguj się</h2>
                 <div className="inputContainer">
                     <input
                         placeholder="email..."
@@ -52,8 +72,14 @@ function Login({ setLogged, setUser, logged }) {
                         type="password"
                     />
                 </div>
+                <Error
+                    error={loginError}
+                    info={"Niepoprawny e-mail lub hasło!"}
+                />
                 <div className="buttonsContainer">
-                    <button onClick={() => login()}>Zaloguj się</button>
+                    <button disabled={loading} onClick={() => loginUser()}>
+                        Zaloguj się
+                    </button>
                     <button
                         className="registerButton"
                         onClick={() => {
@@ -62,6 +88,10 @@ function Login({ setLogged, setUser, logged }) {
                     >
                         Zarejestruj się
                     </button>
+                </div>
+                <div className="forgotPasswordContainer">
+                    Zapomniałeś hasła?{" "}
+                    <Link to="/forgot-password">Zresetuj hasło!</Link>
                 </div>
             </div>
         </div>

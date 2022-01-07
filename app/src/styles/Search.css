@@ -1,5 +1,5 @@
 .Search {
-    min-height: 100vh;
+    flex-grow: 1;
     display: flex;
     align-items: flex-start;
     justify-content: space-around;
