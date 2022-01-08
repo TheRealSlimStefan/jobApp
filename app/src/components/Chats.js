@@ -5,16 +5,9 @@ function Chats() {
     return (
         <div className="Chats">
             <h1>Wiadomości</h1>
-            <ul className="chat_list">
+            <ul className="chatList">
                 <Chat />
-                <Chat />
-                <Chat />
-                <Chat />
-                <Chat />
-                <Chat />
-                <Chat />
-                <Chat />
-                <Chat />
+
             </ul>
         </div>
     );

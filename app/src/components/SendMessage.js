@@ -1,23 +1,26 @@
 import React, { useState } from 'react'
-import { db, auth } from '../firebase'
-import firebase from 'firebase'
+//import firebase from 'firebase'
+//import { db, auth } from '../firebase'
 import { Input, Button } from '@material-ui/core'
 
 function SendMessage({ scroll }) {
     const [msg, setMsg] = useState('')
-
+    
+    
     async function sendMessage(e) {
-        e.preventDefault()
-        const { uid, photoURL } = auth.currentUser
+         e.preventDefault();
 
-        await db.collection('messages').add({
-            text: msg,
-            photoURL,
-            uid,
-            createdAt: firebase.firestore.FieldValue.serverTimestamp()
-        })
-        setMsg('')
-        scroll.current.scrollIntoView({ behavior: 'smooth' })
+
+        // const { uid, photoURL } = auth.currentUser
+
+        // await db.collection('messages').add({
+        //     text: msg,
+        //     photoURL,
+        //     uid,
+        //     createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        // })
+        // setMsg('')
+        // scroll.current.scrollIntoView({ behavior: 'smooth' })
     }
     return (
         <div>

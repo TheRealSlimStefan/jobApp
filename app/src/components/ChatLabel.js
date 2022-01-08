@@ -1,4 +1,4 @@
-import "../styles/Chat.css";
+import "../styles/ChatLabel.css";
 import profileImg from "../images/default_image.png";
 
 function ChatLabel() {
