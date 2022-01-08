@@ -10,6 +10,7 @@ import ErrorPage from "./components/ErrorPage";
 import PrivateRoute from "./components/PrivateRoute";
 import ForgotPassword from "./components/ForgotPassword";
 import { AuthProvider } from "./contexts/AuthContext";
+import EditProfile from "./components/EditProfile";
 
 function App() {
     return (
@@ -38,6 +39,14 @@ function App() {
                             element={
                                 <PrivateRoute>
                                     <Profile />
+                                </PrivateRoute>
+                            }
+                        />
+                        <Route
+                            path="/editprofile"
+                            element={
+                                <PrivateRoute>
+                                    <EditProfile />
                                 </PrivateRoute>
                             }
                         />
