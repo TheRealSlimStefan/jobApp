@@ -2,10 +2,9 @@ import "../styles/Login.css";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { useState } from "react";
-import axios from "axios";
 import Error from "./Error";
 
-function Login({ setLogged, setUser, logged }) {
+function Login() {
     let navigate = useNavigate();
     const { login } = useAuth();
 
@@ -36,21 +35,7 @@ function Login({ setLogged, setUser, logged }) {
         return () => {
             setLoading(false);
         };
-
-        // axios
-        //     .post("http://localhost:3001/login", {
-        //         email: email,
-        //         password: password,
-        //     })
-        //     .then((response) => {
-        //         console.log(response.data);
-        //         setUser(response.data);
-        //         setLogged(true);
-        //         navigate("/");
-        //     });
     }
-
-    // if (logged) return <Navigate to="/search" />;
 
     return (
         <div className="Login">

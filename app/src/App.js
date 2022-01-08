@@ -9,21 +9,9 @@ import Profile from "./components/Profile";
 import ErrorPage from "./components/ErrorPage";
 import PrivateRoute from "./components/PrivateRoute";
 import ForgotPassword from "./components/ForgotPassword";
-import { useState } from "react";
 import { AuthProvider } from "./contexts/AuthContext";
 
 function App() {
-    const [logged, setLogged] = useState(false);
-    const [user, setUser] = useState({});
-
-    // id: 87660,
-    //     name: "Michał",
-    //     surname: "Golonka",
-    //     email: "19smarcins98@gmail.com",
-    //     password: "12345",
-    //     accountType: "employer",
-    //     photos: [],
-
     return (
         <div className="App">
             <Router>
@@ -33,7 +21,7 @@ function App() {
                             path="/search"
                             element={
                                 <PrivateRoute>
-                                    <Search logged={logged} user={user} />
+                                    <Search />
                                 </PrivateRoute>
                             }
                         />
@@ -41,7 +29,7 @@ function App() {
                             path="/chats"
                             element={
                                 <PrivateRoute>
-                                    <Chats logged={logged} user={user} />
+                                    <Chats />
                                 </PrivateRoute>
                             }
                         />
@@ -49,29 +37,12 @@ function App() {
                             path="/profile"
                             element={
                                 <PrivateRoute>
-                                    <Profile
-                                        logged={logged}
-                                        user={user}
-                                        setUser={setUser}
-                                        setLogged={setLogged}
-                                    />
+                                    <Profile />
                                 </PrivateRoute>
                             }
                         />
-                        <Route
-                            path="/login"
-                            element={
-                                <Login
-                                    logged={logged}
-                                    setLogged={setLogged}
-                                    setUser={setUser}
-                                />
-                            }
-                        />
-                        <Route
-                            path="/register"
-                            element={<Register logged={logged} />}
-                        />
+                        <Route path="/login" element={<Login />} />
+                        <Route path="/register" element={<Register />} />
                         <Route
                             path="/forgot-password"
                             element={<ForgotPassword />}

@@ -46,21 +46,7 @@ function ForgotPassword() {
             }
             setLoading(false);
         }
-
-        // axios
-        //     .post("http://localhost:3001/login", {
-        //         email: email,
-        //         password: password,
-        //     })
-        //     .then((response) => {
-        //         console.log(response.data);
-        //         setUser(response.data);
-        //         setLogged(true);
-        //         navigate("/");
-        //     });
     }
-
-    // if (logged) return <Navigate to="/search" />;
 
     return (
         <div className="ForgotPassword">

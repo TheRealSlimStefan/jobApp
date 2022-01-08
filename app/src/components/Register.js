@@ -1,11 +1,10 @@
 import "../styles/Register.css";
-import { useNavigate, Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
-import axios from "axios";
 import Error from "./Error";
 
-function Register({ logged }) {
+function Register() {
     let navigate = useNavigate();
     const { register } = useAuth();
 
@@ -98,24 +97,8 @@ function Register({ logged }) {
             return () => {
                 setLoading(false);
             };
-
-            // axios
-            //     .post("http://localhost:3001/register", {
-            //         name: name,
-            //         surname: surname,
-            //         email: email,
-            //         password: password,
-            //         accountType: "employee",
-            //     })
-            //     .then((response) => {
-            //         // console.log(response);
-            //         navigate("/");
-            //     });
         }
     }
-
-    // console.log(logged);
-    // if (logged) return <Navigate to="/search" />;
 
     return (
         <div className="Register">

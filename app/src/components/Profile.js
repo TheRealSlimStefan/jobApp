@@ -1,14 +1,13 @@
 import "../styles/Profile.css";
-import { useNavigate, Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { BiLogOut } from "react-icons/bi";
 import { AiFillEdit } from "react-icons/ai";
 import { useAuth } from "../contexts/AuthContext";
 import profileImg from "../images/default_image.png";
 
-function Profile({ logged, setUser, setLogged }) {
+function Profile() {
     let navigate = useNavigate();
     const { logOut } = useAuth();
-    //if (!logged) return <Navigate to="/login" />;
 
     async function logOutUser() {
         await logOut();
