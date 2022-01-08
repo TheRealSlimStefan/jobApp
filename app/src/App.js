@@ -5,6 +5,7 @@ import Register from "./components/Register";
 import Search from "./components/Search";
 import Navbar from "./components/Navbar";
 import Chats from "./components/Chats";
+import Chat from "./components/Chat";
 import Profile from "./components/Profile";
 import ErrorPage from "./components/ErrorPage";
 import PrivateRoute from "./components/PrivateRoute";
@@ -30,6 +31,14 @@ function App() {
                             element={
                                 <PrivateRoute>
                                     <Chats />
+                                </PrivateRoute>
+                            }
+                        />
+                        <Route
+                            path="/chats/chat/:id"
+                            element={
+                                <PrivateRoute>
+                                    <Chat />
                                 </PrivateRoute>
                             }
                         />

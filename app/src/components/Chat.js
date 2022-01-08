@@ -1,11 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { db } from "../firebase";
 import { collection, getDocs } from "firebase/firestore";
-
 import SendMessage from "./SendMessage";
-
 import "../styles/Chat.css";
-import profileImg from "../images/default_image.png";
 
 function Chat() {
     const scroll = useRef();

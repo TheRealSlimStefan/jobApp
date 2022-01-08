@@ -1,16 +1,38 @@
 import "../styles/Chats.css";
-import Chat from "./Chat";
+import ChatLabel from "./ChatLabel";
 
 function Chats() {
     return (
         <div className="Chats">
-            <h1>Wiadomości</h1>
-            <ul className="chatList">
-                <Chat />
-
-            </ul>
+            <div className="chatsPanel">
+                <h2>Wiadomości</h2>
+                <div className="chatLabelsContainer">
+                    <ChatLabel />
+                    <ChatLabel />
+                    <ChatLabel />
+                    <ChatLabel />
+                    <ChatLabel />
+                    <ChatLabel />
+                    <ChatLabel />
+                    <ChatLabel />
+                    <ChatLabel />
+                    <ChatLabel />
+                    <ChatLabel />
+                    <ChatLabel />
+                    <ChatLabel />
+                    <ChatLabel />
+                    <ChatLabel />
+                </div>
+            </div>
         </div>
     );
 }
 
 export default Chats;
+
+{
+    /* <ul className="chatList">
+                <Chat />
+
+            </ul> */
+}
