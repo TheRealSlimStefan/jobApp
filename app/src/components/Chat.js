@@ -1,16 +1,37 @@
+import React, { useState, useEffect, useRef } from 'react'
+import { db, auth } from '../firebase'
+
+import SendMessage from './SendMessage';
+
 import "../styles/Chat.css";
 import profileImg from "../images/default_image.png";
 
-function Chats() {
+function Chat() {
+    const scroll = useRef();
+    const [messages, setMessages] = useState([])
+    useEffect(() => {
+        db.collection('messages').orderBy('createdAt').limit(50).onSnapshot(snapshot => {
+            setMessages(snapshot.docs.map(doc => doc.data()))
+        })
+    }, []);
+
+
     return (
-        <li className="Chat">
-            <img src={profileImg} className="profile_img" alt="profile"></img>
-            <div>
-                <p className="contact_name">IT.Corp</p>
-                <p className="last_message">Dzień Dobry</p>
+        <div>
+            <div className="msgs">
+                {messages.map(({ id, text, photoURL, uid }) => (
+                    <div>
+                        <div key={id} className={`msg ${uid === auth.currentUser.uid ? 'sent' : 'received'}`}>
+                            <img src={photoURL} alt="" />
+                            <p>{text}</p>
+                        </div>
+                    </div>
+                ))}
             </div>
-        </li>
-    );
+            <SendMessage scroll={scroll} />
+            <div ref={scroll}></div>
+        </div>
+    )
 }
 
-export default Chats;
+export default Chat;
