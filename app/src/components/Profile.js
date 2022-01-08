@@ -15,9 +15,8 @@ function Profile() {
     const [messages, setMessages] = useState([]);
 
     async function logOutUser() {
-        //await logOut();
-        //navigate("/login");
-        console.log(messages);
+        await logOut();
+        navigate("/login");
     }
 
     useEffect(() => {
