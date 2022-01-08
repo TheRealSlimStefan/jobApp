@@ -6,25 +6,36 @@ import { AiFillEdit } from "react-icons/ai";
 import { useAuth } from "../contexts/AuthContext";
 import profileImg from "../images/default_image.png";
 import { db } from "../firebase";
+import { collection, getDocs } from "firebase/firestore";
 
 function Profile() {
     let navigate = useNavigate();
     const { logOut } = useAuth();
 
-    const [messages, setMessages] = useState();
+    const [messages, setMessages] = useState([]);
 
     async function logOutUser() {
-        await logOut();
-        navigate("/login");
+        //await logOut();
+        //navigate("/login");
+        console.log(messages);
     }
 
     useEffect(() => {
-        db.collection("messages")
-            .orderBy("createdAt")
-            .limit(50)
-            .onSnapshot((snapshot) => {
-                setMessages(snapshot.docs.map((doc) => doc.data()));
+        const messagesCollection = collection(db, "messages");
+
+        getDocs(messagesCollection).then((snapshot) => {
+            snapshot.docs.forEach((doc) => {
+                console.log(doc.data());
+                setMessages((oldArray) => [...oldArray, doc.data()]);
             });
+
+            // console.log(
+            //     snapshot.docs.forEach((doc) => {
+            //         setMessages(...messages, { id: doc.id, ...doc.data() });
+            //     })
+            //     //_document.data.value.map.value.fields.text.stringValue
+            // );
+        });
     }, []);
 
     return (
@@ -52,12 +63,12 @@ function Profile() {
                     <p>Edutuj profil</p>
                 </a>
                 <div>
-                    {messages.map(({ id, text, photoUrl }) => {
-                        <div key={id}>
-                            <img src={photoUrl} />
-                            <p>{text}</p>
-                        </div>;
-                    })}
+                    {messages.length &&
+                        messages.map((message) => (
+                            <div>
+                                <p>{message.text}</p>
+                            </div>
+                        ))}
                 </div>
             </div>
         </>
