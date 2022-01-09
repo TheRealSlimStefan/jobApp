@@ -8,6 +8,7 @@ function Chats() {
                 <h2>Wiadomości</h2>
                 <div className="chatLabelsContainer">
                     <ChatLabel />
+                    {/* <ChatLabel />
                     <ChatLabel />
                     <ChatLabel />
                     <ChatLabel />
@@ -20,8 +21,7 @@ function Chats() {
                     <ChatLabel />
                     <ChatLabel />
                     <ChatLabel />
-                    <ChatLabel />
-                    <ChatLabel />
+                    <ChatLabel /> */}
                 </div>
             </div>
         </div>
@@ -29,10 +29,3 @@ function Chats() {
 }
 
 export default Chats;
-
-{
-    /* <ul className="chatList">
-                <Chat />
-
-            </ul> */
-}

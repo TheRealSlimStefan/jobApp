@@ -6,13 +6,13 @@ function ChatLabel() {
     let navigate = useNavigate();
 
     return (
-        <div className="ChatLabel" onClick={() => navigate("/chats/chat/1")}>
+        <div className="ChatLabel" onClick={() => navigate("/chats/chat")}>
             <div className="imageContainer">
-                <img src={profileImg} className="profile_img" alt="profile" />
+                <img src={profileImg} className="profileImg" alt="profile" />
             </div>
             <div className="descriptionContainer">
-                <p className="contact_name">IT.Corp</p>
-                <p className="last_message">Dzień Dobry</p>
+                <p className="contactName">Krystian Bagiński</p>
+                <p className="lastMessage">Dzień Dobry. Piszę w sprawie...</p>
             </div>
         </div>
     );
