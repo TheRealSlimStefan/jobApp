@@ -1,0 +1,110 @@
+.editProfile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    flex-grow: 1;
+    margin-top: 4rem;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    position: relative;
+    width: 100%;
+    font-family: 'Work Sans', sans-serif;
+    font-size: 14px;
+    line-height: 20px;
+    vertical-align: middle;
+    color: #d9d9d9;
+    text-align: left;
+}
+
+.editProfile .container {
+    width: 90%;
+}
+
+.editProfile .backBtn {
+    width: 2.5rem;
+    height: 2.5rem;
+    position: fixed;
+    top: 1.5rem;
+    left: 1.5rem;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    padding: 5px 5px;
+    font-size: 2rem;
+    letter-spacing: 0.5px;
+    border: 1px solid #ccc;
+    color: rgb(165, 160, 160);
+    outline: none;
+    background: none;
+}
+
+.editProfile .backBtn svg {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.editProfile form:last-child {
+    margin-bottom: 10rem;
+}
+
+.editProfile .field {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 0.5rem 0.5rem;
+}
+
+.editProfile .field label {
+    font-weight: bold;
+    padding-bottom: 2px;
+    color: #706b6b;
+
+}
+
+.editProfile textarea {
+    background-color: #dddddd;
+    color: #666666;
+    padding: 1em;
+    border-radius: 10px;
+    border: 2px solid transparent;
+    outline: none;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 1.4;
+    width: 100%;
+    height: 100px;
+    transition: all 0.2s; 
+    resize: none;
+}
+  
+textarea:hover {
+    cursor: pointer;
+    background-color: #eeeeee;
+}
+  
+textarea:focus {
+    cursor: text;
+    color: #333333;
+    background-color: white;
+    border-color: #333333;
+}
+
+.editProfile .field input{
+    font-size: 20px;
+    padding: 10px 5px;
+    border-radius: 5px;
+    border: none;
+    outline: none;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 15px;
+    width: 100%;
+    height: 30px;
+    font-family: 'Work Sans', sans-serif;
+    border: 0;
+    color: #263238;
+    border-bottom: 1px solid #d9d9d9;
+}
+
+
