@@ -1,10 +1,24 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { db } from '../firebase';
+import {
+    collection,
+    onSnapshot,
+    doc,
+    query,
+    where,
+    getDoc,
+    updateDoc
+
+} from 'firebase/firestore';
+import { useAuth } from '../contexts/AuthContext';
+
 import '../styles/EditProfile.css';
 import Select from 'react-select';
 import { AiOutlineArrowLeft } from 'react-icons/ai';
 import { Link, useNavigate } from 'react-router-dom';
 
 export default function EditProfile() {
+    // Selector options
     const workingHoursOptions = [
         { value: '1/1', label: 'Pełen etat' },
         { value: '3/4', label: '3/4 Etatu' },
@@ -39,6 +53,57 @@ export default function EditProfile() {
         { value: 'fullStackDeveloper', label: 'Full Stack Developer' },
     ];
 
+    const { currentUser } = useAuth();
+
+    const [profileData, setProfileData] = useState({});
+    const [description, setDescription] = useState("");
+    const [localization, setLocalization] = useState("");
+    const [workingHours, setWorkingHours] = useState("");
+    const [experience, setExperience] = useState("");
+
+
+    // Invoking all update functions on click ApplyBnt
+    const updateProfile = (id) => {
+        updateLocation(id, localization);
+        updateWorkingHours(id, workingHours);
+        updateExperience(id, experience);
+        updateDescription(id, description);
+    }
+
+    const updateDescription = async (id, description) => {
+        const profileDoc = doc(db, "users", id);
+        const newFields = {description: description};
+        await updateDoc(profileDoc, newFields);
+    }
+
+    const updateExperience = async (id, experience) => {
+        const profileDoc = doc(db, "users", id);
+        const newFields = {experience: experience};
+        await updateDoc(profileDoc, newFields);
+    }
+
+    const updateLocation = async (id, localization) => {
+        const profileDoc = doc(db, "users", id);
+        const newFields = {localization: localization};
+        await updateDoc(profileDoc, newFields);
+    }
+    const updateWorkingHours = async (id, workingHours) => {
+        const profileDoc = doc(db, "users", id);
+        const newFields = {workingHours: workingHours};
+        await updateDoc(profileDoc, newFields);
+    }
+
+    useEffect(() => {
+        async function getProfileData() {
+
+            const queryResponse = await getDoc(doc(db, "users", currentUser.uid));
+            setProfileData(queryResponse.data())
+        }
+
+        getProfileData();
+        console.log(profileData);
+    }, []);
+
     return (
         <div className="editProfile">
             <div className="container">
@@ -52,6 +117,7 @@ export default function EditProfile() {
                             type="text"
                             name="peas"
                             id="aboutMe"
+                            onChange={e => {setDescription(e.target.value)}}
                         ></textarea>
                     </div>
                     <div className="field">
@@ -64,17 +130,21 @@ export default function EditProfile() {
                     </div>
                     <div className="field">
                         <label for="aboutMe">Doświadczenie</label>
-                        <Select options={expirienceOptions} />
+                        <Select options={expirienceOptions} onChange={e => {setExperience(e.value)}} />
                     </div>
                     <div className="field">
                         <label for="aboutMe">Lokalizacja</label>
-                        <Select options={localiztionOptions} />
+                        <Select options={localiztionOptions} onChange={e => {setLocalization(e.value)}}/>
                     </div>
                     <div className="field">
                         <label for="">Wymiar pracy</label>
-                        <Select options={workingHoursOptions} />
+                        <Select options={workingHoursOptions} onChange={e => {setWorkingHours(e.value)}}/>
                     </div>
                 </form>
+                <div className='applyBtnContainer'>
+                    <button className="applyBtn" onClick={() => {updateProfile(currentUser.uid)}}>Zapisz zmiany</button>
+                </div>
+
             </div>
         </div>
     );
