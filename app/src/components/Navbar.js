@@ -15,7 +15,9 @@ function Navbar() {
         return locationPathname.substring(0, 12);
     }
 
-    return getLocationPathname() !== "/chats/chat/" && currentUser ? (
+    return getLocationPathname() !== "/chats/chat/" &&
+        location.pathname !== "/register" &&
+        currentUser ? (
         <div className="Navbar">
             <NavLink to="profile">
                 <CgProfile />

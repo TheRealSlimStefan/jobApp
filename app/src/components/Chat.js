@@ -62,7 +62,13 @@ function Chat() {
 
         getMessages();
 
-        return unsubscribe;
+        return () => {
+            setMessages([]);
+            setChatPartnerName("");
+            setChatPartnerSurname("");
+
+            return unsubscribe;
+        };
     }, []);
 
     return (

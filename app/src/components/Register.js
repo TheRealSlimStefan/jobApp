@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import Error from "./Error";
+import { db } from "../firebase";
+import { setDoc, doc, addDoc, collection } from "firebase/firestore";
 
 function Register() {
     let navigate = useNavigate();
@@ -45,13 +47,13 @@ function Register() {
 
     function handleRadioButtonInput(e) {
         setError({ error: false, info: "" });
-        console.log(e.target.value);
+        setAccountType(e.target.value);
     }
 
     async function registerNewUser() {
         setError({ error: false, info: "" });
 
-        if (name.length < 6)
+        if (name.length === 0)
             setError({
                 error: true,
                 info: "Pole imie nie może być puste!",
@@ -84,7 +86,32 @@ function Register() {
         else {
             try {
                 setLoading(true);
-                await register(email, password);
+
+                const registeredUser = await register(email, password);
+
+                const userObject = {
+                    userId: registeredUser.user.uid,
+                    name: name,
+                    surname: surname,
+                    accountType: accountType,
+                    description: "",
+                    image: "",
+                    occupation: "",
+                    technologies: [],
+                    experience: "",
+                    localization: "",
+                    workingHours: "",
+                };
+
+                console.log(userObject);
+
+                // await addDoc(collection(db, "users"), userObject);
+
+                await setDoc(
+                    doc(db, "users", registeredUser.user.uid),
+                    userObject
+                );
+
                 navigate("/");
             } catch {
                 setError({
@@ -96,6 +123,12 @@ function Register() {
 
             return () => {
                 setLoading(false);
+                setName("");
+                setSurname("");
+                setEmail("");
+                setPassword("");
+                setRepeatedPassword("");
+                setAccountType("employee");
             };
         }
     }

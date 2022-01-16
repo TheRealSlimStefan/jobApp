@@ -4,14 +4,15 @@ import { db } from "../firebase";
 import React, { useState, useEffect } from "react";
 import {
     collection,
-    getDocs,
     query,
     where,
     onSnapshot,
+    getDoc,
+    doc,
 } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 
-function ChatLabel({ employeeId, employerId, chatId, chatPartner }) {
+function ChatLabel({ chatId, chatPartner }) {
     let navigate = useNavigate();
 
     const [name, setName] = useState("");
@@ -42,30 +43,11 @@ function ChatLabel({ employeeId, employerId, chatId, chatPartner }) {
         setSurname("");
         setMessages([]);
 
-        async function getName() {
-            let databaseQuery = query(
-                collection(db, "users"),
-                where("userId", "==", chatPartner)
-            );
+        async function getUserNameAndSurname() {
+            const queryResponse = await getDoc(doc(db, "users", chatPartner));
 
-            const queryResponse = await getDocs(databaseQuery);
-
-            queryResponse.forEach((doc) => {
-                setName(doc.data().name);
-            });
-        }
-
-        async function getSurname() {
-            let databaseQuery = query(
-                collection(db, "users"),
-                where("userId", "==", chatPartner)
-            );
-
-            const queryResponse = await getDocs(databaseQuery);
-
-            queryResponse.forEach((doc) => {
-                setSurname(doc.data().surname);
-            });
+            setName(queryResponse.data().name);
+            setSurname(queryResponse.data().surname);
         }
 
         async function getMessages() {
@@ -79,16 +61,13 @@ function ChatLabel({ employeeId, employerId, chatId, chatPartner }) {
                 queryResponse.forEach((doc) => {
                     setMessages((oldArray) => [
                         ...oldArray,
-                        {
-                            ...doc.data(),
-                        },
+                        { messageId: doc.id, ...doc.data() },
                     ]);
                 });
             });
         }
 
-        getName();
-        getSurname();
+        getUserNameAndSurname();
         getMessages();
         return unsubscribe;
     }, []);
