@@ -1,17 +1,117 @@
 .Search {
     flex-grow: 1;
     display: flex;
-    align-items: flex-start;
-    justify-content: space-around;
-    padding: 50px 0;
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: column;
+    /* padding: 50px 0; */
 }
 
-.Search button {
-    background-color: #66a9ff;
-    border: none;
-    border-radius: 5px;
+.Search .imageContainer {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.Search .imageContainer img {
+    width: 100%;
+    margin-top: -50px;
+    box-shadow: 1px 1px 4px 1px #777;
+}
+
+.Search .infoContainer {
+    width: 90%;
+    padding: 25px 0 25px;
+    border-bottom: 2px solid #eee;
+}
+
+.Search .infoContainer p {
+    font-size: 18px;
+    padding: 5px 0 10px;
+}
+
+.Search .infoContainer p:nth-child(1) {
+    font-size: 24px;
+    font-weight: bold;
+    padding: 10px 0 5px;
+}
+
+.Search .infoContainer p:nth-child(2) {
+    color: #555;
+}
+
+.Search .moreInfoContainer {
+    width: 90%;
+    margin-bottom: 20px;
+    /* padding: 25px 0 20px; */
+}
+
+.Search .moreInfoContainer .moreInfoElement {
+    width: 100%;
+    text-align: justify;
+    padding: 25px 0 15px;
+}
+
+.Search .moreInfoContainer .moreInfoElement h2 {
+    font-size: 18px;
+    padding: 0 0 30px;
+}
+
+.Search .moreInfoContainer .moreInfoElement p {
+    font-size: 16px;
+    color: #555;
+}
+
+.Search .moreInfoContainer .moreInfoElement .technologiesContainer {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.Search .moreInfoContainer .moreInfoElement .technologiesContainer .technology {
+    display: flex;
+    align-items: center;
+    padding: 12px 25px;
+    /* background-color: #6f87f1; */
+    /* border: 2px solid #5d76d0; */
+    background-color: #73b2ff;
+    border-radius: 30px;
+    margin: 10px 5px;
+    box-shadow: 1px 1px 3px 1px #777;
     color: white;
-    padding: 15px 20px;
-    font-size: 14px;
-    letter-spacing: 0.5px;
+}
+
+.Search
+    .moreInfoContainer
+    .moreInfoElement
+    .technologiesContainer
+    .technology:nth-child(even) {
+    padding: 10px 15px;
+    background-color: #2688ff;
+    border-radius: 30px;
+}
+
+.Search .moreInfoContainer .moreInfoElement svg {
+    font-size: 26px;
+    margin-right: 12px;
+}
+
+.Search .moreInfoContainer .moreInfoElement .skillLevelContainer {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    padding: 20px 0 35px;
+}
+
+.Search .moreInfoContainer .moreInfoElement .locationContainer {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    padding: 20px 0 35px;
+}
+
+.Search .moreInfoContainer .moreInfoElement .hoursOfWorkContainer {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    padding: 20px 0 35px;
 }
