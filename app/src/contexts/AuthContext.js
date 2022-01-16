@@ -1,4 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { db } from "../firebase";
 import { auth } from "../firebase";
 
 const AuthContext = React.createContext();
@@ -9,6 +11,7 @@ export function useAuth() {
 
 export function AuthProvider({ children }) {
     const [currentUser, setCurrentUser] = useState();
+    const [currentUserData, setCurrentUserData] = useState({});
     const [loading, setLoading] = useState(true);
 
     function register(email, password) {
@@ -29,6 +32,22 @@ export function AuthProvider({ children }) {
 
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged((user) => {
+            if (user) {
+                async function getUserData() {
+                    const databaseQuery = query(
+                        collection(db, "users"),
+                        where("userId", "==", user.uid)
+                    );
+                    const querySnapshot = await getDocs(databaseQuery);
+                    querySnapshot.forEach((doc) => {
+                        setCurrentUserData(doc.data());
+                    });
+                }
+                getUserData();
+            } else {
+                //jesli wyloguje sie to wyczyscic, możliwe że nie trzeba tego robić
+            }
+
             setCurrentUser(user);
             setLoading(false);
         });
@@ -38,6 +57,7 @@ export function AuthProvider({ children }) {
 
     const value = {
         currentUser,
+        currentUserData,
         login,
         register,
         logOut,

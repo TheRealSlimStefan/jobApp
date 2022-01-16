@@ -1,141 +1,104 @@
 import React, { useState, useEffect } from "react";
 import { db } from "../firebase";
-import { collection, getDocs } from "firebase/firestore";
+import {
+    collection,
+    onSnapshot,
+    query,
+    where,
+    getDocs,
+} from "firebase/firestore";
+import Message from "./Message";
 import SendMessage from "./SendMessage";
 import "../styles/Chat.css";
 import { BsArrowLeftShort } from "react-icons/bs";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
 
 function Chat() {
+    const { currentUser } = useAuth();
+    const { state } = useLocation();
+    const { chatId, chatPartner } = state;
+
     const [messages, setMessages] = useState([]);
+    const [chatPartnerName, setChatPartnerName] = useState("");
+    const [chatPartnerSurname, setChatPartnerSurname] = useState("");
+    let navigate = useNavigate();
 
     useEffect(() => {
-        setMessages([]);
+        let unsubscribe;
 
-        const messagesCollection = collection(db, "messages");
+        async function getMessages() {
+            const chatPartnerData = query(
+                collection(db, "users"),
+                where("userId", "==", chatPartner)
+            );
 
-        getDocs(messagesCollection).then((snapshot) => {
-            snapshot.docs.forEach((doc) => {
-                console.log(doc.data());
-                setMessages((oldArray) => [...oldArray, doc.data()]);
+            await getDocs(chatPartnerData).then((snapshot) => {
+                snapshot.docs.forEach((doc) => {
+                    setChatPartnerName(doc.data().name);
+                    setChatPartnerSurname(doc.data().surname);
+                });
             });
 
-            // console.log(
-            //     snapshot.docs.forEach((doc) => {
-            //         setMessages(...messages, { id: doc.id, ...doc.data() });
-            //     })
-            //     //_document.data.value.map.value.fields.text.stringValue
-            // );
-        });
+            const databaseQuery = query(
+                collection(db, "messages"),
+                where("chatId", "==", chatId)
+            );
+
+            unsubscribe = onSnapshot(databaseQuery, (querySnapshot) => {
+                setMessages([]);
+                querySnapshot.forEach((doc) => {
+                    setMessages((oldArray) =>
+                        [
+                            ...oldArray,
+                            { messageId: doc.id, ...doc.data() },
+                        ].sort(function (a, b) {
+                            return a.date - b.date;
+                        })
+                    );
+                });
+            });
+        }
+
+        getMessages();
+
+        return unsubscribe;
     }, []);
 
     return (
         <div className="Chat">
             <div className="chatNavigation">
-                <div className="backButtonContainer">
+                <div
+                    onClick={() => navigate("/chats")}
+                    className="backButtonContainer"
+                >
                     <BsArrowLeftShort />
                 </div>
-                <div className="chatDescription">Krzysztof Bagiński</div>
+                <div className="chatDescription">
+                    {chatPartnerName} {chatPartnerSurname}
+                </div>
             </div>
-
             <div className="messages">
-                <div key={2} className={`msg sent`}>
-                    <img
-                        src={
-                            "https://static.wikia.nocookie.net/trailerparkboys/images/6/63/Bubbles.jpg/revision/latest?cb=20111017154207"
-                        }
-                        alt=""
-                    />
-                    <p>{"Zrob mi kurwa louuuda"}</p>
-                </div>
-                <div key={3} className={`msg received`}>
-                    <img
-                        src={
-                            "https://static.wikia.nocookie.net/trailerpark/images/9/9e/Rickys.shirts.16.jpg/revision/latest/top-crop/width/360/height/450?cb=20101222153211"
-                        }
-                        alt=""
-                    />
-                    <p>{"kurde faja buubles co ty gadasz"}</p>
-                </div>
-                <div key={2342} className={`msg sent`}>
-                    <img
-                        src={
-                            "https://static.wikia.nocookie.net/trailerparkboys/images/6/63/Bubbles.jpg/revision/latest?cb=20111017154207"
-                        }
-                        alt=""
-                    />
-                    <p>{"Zrob mi kurwa louuuda"}</p>
-                </div>
-                <div key={3} className={`msg received`}>
-                    <img
-                        src={
-                            "https://static.wikia.nocookie.net/trailerpark/images/9/9e/Rickys.shirts.16.jpg/revision/latest/top-crop/width/360/height/450?cb=20101222153211"
-                        }
-                        alt=""
-                    />
-                    <p>{"kurde faja buubles co ty gadasz"}</p>
-                </div>
-                <div key={324342} className={`msg sent`}>
-                    <img
-                        src={
-                            "https://static.wikia.nocookie.net/trailerparkboys/images/6/63/Bubbles.jpg/revision/latest?cb=20111017154207"
-                        }
-                        alt=""
-                    />
-                    <p>{"Zrob mi kurwa louuuda"}</p>
-                </div>
-                <div key={34534} className={`msg received`}>
-                    <img
-                        src={
-                            "https://static.wikia.nocookie.net/trailerpark/images/9/9e/Rickys.shirts.16.jpg/revision/latest/top-crop/width/360/height/450?cb=20101222153211"
-                        }
-                        alt=""
-                    />
-                    <p>{"kurde faja buubles co ty gadasz"}</p>
-                </div>
-                <div key={454352} className={`msg sent`}>
-                    <img
-                        src={
-                            "https://static.wikia.nocookie.net/trailerparkboys/images/6/63/Bubbles.jpg/revision/latest?cb=20111017154207"
-                        }
-                        alt=""
-                    />
-                    <p>{"Zrob mi kurwa louuuda"}</p>
-                </div>
-                <div key={33545} className={`msg received`}>
-                    <img
-                        src={
-                            "https://static.wikia.nocookie.net/trailerpark/images/9/9e/Rickys.shirts.16.jpg/revision/latest/top-crop/width/360/height/450?cb=20101222153211"
-                        }
-                        alt=""
-                    />
-                    <p>{"kurde faja buubles co ty gadasz"}</p>
-                </div>
-                <div key={221323} className={`msg sent`}>
-                    <img
-                        src={
-                            "https://static.wikia.nocookie.net/trailerparkboys/images/6/63/Bubbles.jpg/revision/latest?cb=20111017154207"
-                        }
-                        alt=""
-                    />
-                    <p>{"Zrob mi kurwa louuuda"}</p>
-                </div>
-                <div key={123213} className={`msg received`}>
-                    <img
-                        src={
-                            "https://static.wikia.nocookie.net/trailerpark/images/9/9e/Rickys.shirts.16.jpg/revision/latest/top-crop/width/360/height/450?cb=20101222153211"
-                        }
-                        alt=""
-                    />
-                    <p>{"kurde faja buubles co ty gadasz"}</p>
-                </div>
-                {/* <div>
-                    {messages.length &&
-                        messages.map((message) => (
-                            <div>
-                                <p>{message.text}</p>
-                            </div>
-                        ))}
-                </div> */}
+                <>
+                    {messages.length > 0
+                        ? messages.map((message) => {
+                              let componentType;
+                              if (message.sender === currentUser.uid) {
+                                  componentType = "sender";
+                              } else {
+                                  componentType = "reciever";
+                              }
+
+                              return (
+                                  <Message
+                                      key={message.messageId}
+                                      text={message.text}
+                                      componentType={componentType}
+                                  />
+                              );
+                          })
+                        : null}
+                </>
             </div>
             <SendMessage />
         </div>

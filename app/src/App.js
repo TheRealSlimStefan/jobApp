@@ -36,7 +36,7 @@ function App() {
                             }
                         />
                         <Route
-                            path="/chats/chat"
+                            path="/chats/chat/:id"
                             element={
                                 <PrivateRoute>
                                     <Chat />
