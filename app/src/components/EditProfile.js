@@ -1,11 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../firebase';
 import {
-    collection,
-    onSnapshot,
     doc,
-    query,
-    where,
     getDoc,
     updateDoc
 
@@ -15,7 +11,7 @@ import { useAuth } from '../contexts/AuthContext';
 import '../styles/EditProfile.css';
 import Select from 'react-select';
 import { AiOutlineArrowLeft } from 'react-icons/ai';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link} from 'react-router-dom';
 
 export default function EditProfile() {
     // Selector options
@@ -60,14 +56,31 @@ export default function EditProfile() {
     const [localization, setLocalization] = useState("");
     const [workingHours, setWorkingHours] = useState("");
     const [experience, setExperience] = useState("");
-
+    const [occupation, setOccupation] = useState([]);
+    const [technology, setTechnology] = useState([]);
 
     // Invoking all update functions on click ApplyBnt
     const updateProfile = (id) => {
+        updateTechnology(id, technology);
+        updateOccupation(id, occupation);
         updateLocation(id, localization);
         updateWorkingHours(id, workingHours);
         updateExperience(id, experience);
         updateDescription(id, description);
+    }
+
+    const updateOccupation = async (id, occupation) => {
+        const occupationValues = occupation.map(el => el.value);
+        const profileDoc = doc(db, "users", id);
+        const newFields = {occupation: occupationValues};
+        await updateDoc(profileDoc, newFields);
+    }
+
+    const updateTechnology = async (id, technology) => {
+        const technologyValues = technology.map(el => el.value);
+        const profileDoc = doc(db, "users", id);
+        const newFields = {technology: technologyValues};
+        await updateDoc(profileDoc, newFields);
     }
 
     const updateDescription = async (id, description) => {
@@ -122,11 +135,11 @@ export default function EditProfile() {
                     </div>
                     <div className="field">
                         <label for="aboutMe">Stanowisko</label>
-                        <Select options={positionsOptions} isMulti />
+                        <Select options={positionsOptions} isMulti onChange={e => setOccupation([...e])} />
                     </div>
                     <div className="field">
                         <label for="aboutMe">Technologie</label>
-                        <Select options={technologiesOptions} isMulti />
+                        <Select options={technologiesOptions} isMulti onChange={e => setTechnology([...e])}/>
                     </div>
                     <div className="field">
                         <label for="aboutMe">Doświadczenie</label>
