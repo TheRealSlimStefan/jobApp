@@ -22,7 +22,7 @@
     z-index: 1000;
     background-color: white;
     padding-bottom: 40px;
-    padding-top: 60px;
+    padding-top: 50px;
 }
 
 .profile .logoutBtn {
@@ -71,7 +71,7 @@
 
 .profile .moreInfoContainer {
     width: 90%;
-    margin-top: 250px;
+    margin-top: 300px;
     /* padding: 25px 0 20px; */
 }
 
@@ -152,4 +152,10 @@
     align-items: center;
     font-size: 16px;
     padding: 20px 0 20px;
+}
+
+.profile p.name {
+    font-weight: bold;
+    font-size: 20px;
+    padding: 20px 0;
 }

@@ -11,20 +11,27 @@ import { Link } from "react-router-dom";
 export default function EditProfile() {
     // Selector options
     const workingHoursOptions = [
-        { value: "1/1", label: "Pełen etat" },
-        { value: "1/2", label: "1/2 Etatu" },
-        { value: "3/4", label: "3/4 Etatu" },
+        { value: "1/1 Etatu", label: "Pełen etat" },
+        { value: "1/2 Etatu", label: "1/2 Etatu" },
+        { value: "3/4 Etatu", label: "3/4 Etatu" },
     ];
     const localiztionOptions = [
-        { value: "Podlaskie", label: "Podlaskie" },
         { value: "Białystok", label: "Białystok" },
+        { value: "Bydgoszcz", label: "Bydgoszcz" },
+        { value: "Gdańsk", label: "Gdańsk" },
+        { value: "Kraków", label: "Kraków" },
+        { value: "Lublin", label: "Lublin" },
+        { value: "Łódź", label: "Łódź" },
+        { value: "Poznań", label: "Poznań" },
+        { value: "Szczecin", label: "Szczecin" },
+        { value: "Wrocław", label: "Wrocław" },
         { value: "Warszawa", label: "Warszawa" },
     ];
     const expirienceOptions = [
-        { value: "intern", label: "Stażysta" },
-        { value: "junior", label: "Junior" },
-        { value: "mid", label: "Mid" },
-        { value: "senior", label: "Senior" },
+        { value: "Intern", label: "Stażysta" },
+        { value: "Junior", label: "Junior" },
+        { value: "Mid", label: "Mid" },
+        { value: "Senior", label: "Senior" },
     ];
     const technologiesOptions = [
         { value: "HTML", label: "HTML" },
@@ -35,28 +42,31 @@ export default function EditProfile() {
         { value: "C++", label: "C++" },
         { value: "Git", label: "Git" },
     ];
-    const positionsOptions = [
-        { value: "programmer ", label: "Programista" },
-        { value: "webDeveloper", label: "Web Developer" },
-        { value: "devops", label: "DevOps" },
-        { value: "frontendDeveloper", label: "Front-end Developer" },
-        { value: "backendDeveloper", label: "Back-end Developer" },
-        { value: "fullStackDeveloper", label: "Full Stack Developer" },
+    const occupationOptions = [
+        { value: "Programista", label: "Programista" },
+        { value: "Software Developer", label: "Software Developer" },
+        { value: "Software Engineer", label: "Software Engineer" },
+        { value: "Web Developer", label: "Web Developer" },
+        { value: "DevOps Developer", label: "DevOps Developer" },
+        { value: "Front-end Developer", label: "Front-end Developer" },
+        { value: "Back-end Developer", label: "Back-end Developer" },
+        { value: "Full Stack Developer", label: "Full Stack Developer" },
+        { value: "Software Architect", label: "Software Architect" },
     ];
 
     const { currentUser } = useAuth();
 
-    const [profileData, setProfileData] = useState({});
+    // const [profileData, setProfileData] = useState({});
     const [description, setDescription] = useState("");
     const [localization, setLocalization] = useState("");
     const [workingHours, setWorkingHours] = useState("");
     const [experience, setExperience] = useState("");
     const [occupation, setOccupation] = useState([]);
-    const [technology, setTechnology] = useState([]);
+    const [technologies, setTechnologies] = useState([]);
 
     // Invoking all update functions on click ApplyBnt
     const updateProfile = (id) => {
-        updateTechnology(id, technology);
+        updateTechnologies(id, technologies);
         updateOccupation(id, occupation);
         updateLocation(id, localization);
         updateWorkingHours(id, workingHours);
@@ -65,53 +75,64 @@ export default function EditProfile() {
     };
 
     const updateOccupation = async (id, occupation) => {
-        const occupationValues = occupation.map((el) => el.value);
-        const profileDoc = doc(db, "users", id);
-        const newFields = { occupation: occupationValues };
-        await updateDoc(profileDoc, newFields);
+        if (occupation !== "") {
+            const profileDoc = doc(db, "users", id);
+            const newFields = { occupation: occupation };
+            await updateDoc(profileDoc, newFields);
+        }
     };
 
-    const updateTechnology = async (id, technology) => {
-        const technologyValues = technology.map((el) => el.value);
-        const profileDoc = doc(db, "users", id);
-        const newFields = { technology: technologyValues };
-        await updateDoc(profileDoc, newFields);
+    const updateTechnologies = async (id, technologies) => {
+        if (technologies.length !== 0) {
+            const technologiesValues = technologies.map((el) => el.value);
+            const profileDoc = doc(db, "users", id);
+            const newFields = { technologies: technologiesValues };
+            await updateDoc(profileDoc, newFields);
+        }
     };
 
     const updateDescription = async (id, description) => {
-        const profileDoc = doc(db, "users", id);
-        const newFields = { description: description };
-        await updateDoc(profileDoc, newFields);
+        if (description !== "") {
+            const profileDoc = doc(db, "users", id);
+            const newFields = { description: description };
+            await updateDoc(profileDoc, newFields);
+        }
     };
 
     const updateExperience = async (id, experience) => {
-        const profileDoc = doc(db, "users", id);
-        const newFields = { experience: experience };
-        await updateDoc(profileDoc, newFields);
+        if (experience !== "") {
+            const profileDoc = doc(db, "users", id);
+            const newFields = { experience: experience };
+            await updateDoc(profileDoc, newFields);
+        }
     };
 
     const updateLocation = async (id, localization) => {
-        const profileDoc = doc(db, "users", id);
-        const newFields = { localization: localization };
-        await updateDoc(profileDoc, newFields);
+        if (localization !== "") {
+            const profileDoc = doc(db, "users", id);
+            const newFields = { localization: localization };
+            await updateDoc(profileDoc, newFields);
+        }
     };
     const updateWorkingHours = async (id, workingHours) => {
-        const profileDoc = doc(db, "users", id);
-        const newFields = { workingHours: workingHours };
-        await updateDoc(profileDoc, newFields);
+        if (workingHours !== "") {
+            const profileDoc = doc(db, "users", id);
+            const newFields = { workingHours: workingHours };
+            await updateDoc(profileDoc, newFields);
+        }
     };
 
-    useEffect(() => {
-        async function getProfileData() {
-            const queryResponse = await getDoc(
-                doc(db, "users", currentUser.uid)
-            );
-            setProfileData(queryResponse.data());
-        }
+    // useEffect(() => {
+    //     async function getProfileData() {
+    //         const queryResponse = await getDoc(
+    //             doc(db, "users", currentUser.uid)
+    //         );
+    //         setProfileData(queryResponse.data());
+    //         console.log(queryResponse.data());
+    //     }
 
-        getProfileData();
-        // console.log(profileData);
-    }, []);
+    //     getProfileData();
+    // }, []);
 
     return (
         <div className="editProfile">
@@ -136,9 +157,8 @@ export default function EditProfile() {
                     <div className="field">
                         <label htmlFor="aboutMe">STANOWISKO</label>
                         <Select
-                            options={positionsOptions}
-                            isMulti
-                            onChange={(e) => setOccupation([...e])}
+                            options={occupationOptions}
+                            onChange={(e) => setOccupation(e.value)}
                         />
                     </div>
                     <div className="field">
@@ -146,7 +166,7 @@ export default function EditProfile() {
                         <Select
                             options={technologiesOptions}
                             isMulti
-                            onChange={(e) => setTechnology([...e])}
+                            onChange={(e) => setTechnologies([...e])}
                         />
                     </div>
                     <div className="field">

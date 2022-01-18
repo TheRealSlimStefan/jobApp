@@ -149,3 +149,11 @@ textarea:focus {
     font-size: 14px;
     letter-spacing: 0.5px;
 }
+
+.editProfile .css-b62m3t-container > * {
+    color: black;
+}
+
+/* .editProfile .css-2613qy-menu {
+    margin-bottom: 1000px;
+} */
