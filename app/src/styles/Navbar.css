@@ -4,6 +4,7 @@
     justify-content: space-around;
     background-color: white;
     z-index: 1000;
+    padding: 10px 0;
 }
 
 .Navbar a {

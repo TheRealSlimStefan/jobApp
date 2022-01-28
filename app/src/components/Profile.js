@@ -1,11 +1,10 @@
 import "../styles/Profile.css";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { BiLogOut } from "react-icons/bi";
 import { AiFillSetting } from "react-icons/ai";
-import { AiFillEdit } from "react-icons/ai";
 import { useAuth } from "../contexts/AuthContext";
-import profileImg from "../images/corpo_worker.png";
+import profileImg from "../images/default_image_original.jpg";
 import { IoLocationSharp } from "react-icons/io5";
 import { GiSkills } from "react-icons/gi";
 import { MdWork } from "react-icons/md";
@@ -22,6 +21,7 @@ function Profile() {
         experience: "",
         localization: "",
         workingHours: "",
+        imageUrl: "",
     });
 
     async function logOutUser() {
@@ -63,11 +63,20 @@ function Profile() {
                     >
                         <AiFillSetting />
                     </button>
-                    <img
-                        src={profileImg}
-                        className="profileImg"
-                        alt="profile"
-                    ></img>
+                    {userData.imageUrl !== "" ? (
+                        <img
+                            src={userData.imageUrl}
+                            className="profileImg"
+                            alt="profile"
+                        ></img>
+                    ) : (
+                        <img
+                            src={profileImg}
+                            className="profileImg"
+                            alt="profile"
+                        ></img>
+                    )}
+
                     <p className="name">
                         {userData.name} {userData.surname}
                     </p>
@@ -75,11 +84,19 @@ function Profile() {
 
                 <div className="moreInfoContainer">
                     <div className="moreInfoElement">
-                        <h2>O MNIE</h2>
+                        <h2>
+                            {userData.accountType === "employer"
+                                ? "O FIRMIE"
+                                : "O MNIE"}
+                        </h2>
                         <p>{userData.description}</p>
                     </div>
                     <div className="moreInfoElement">
-                        <h2>TECHNOLOGIE</h2>
+                        <h2>
+                            {userData.accountType === "employer"
+                                ? "WYMAGANE TECHNOLOGIE"
+                                : "TECHNOLOGIE"}
+                        </h2>
                         <div className="technologiesContainer">
                             {userData.technologies.length > 0
                                 ? userData.technologies.map((technology) => (
@@ -94,19 +111,31 @@ function Profile() {
                         </div>
                     </div>
                     <div className="moreInfoElement">
-                        <h2>DOŚWIADCZENIE</h2>
+                        <h2>
+                            {userData.accountType === "employer"
+                                ? "WYMAGANE DOŚWIADCZENIE"
+                                : "DOŚWIADCZENIE"}
+                        </h2>
                         <div className="skillLevelContainer">
                             <GiSkills /> <p>{userData.experience}</p>
                         </div>
                     </div>
                     <div className="moreInfoElement">
-                        <h2>LOKALIZACJA</h2>
+                        <h2>
+                            {userData.accountType === "employer"
+                                ? "WYMAGANA LOKALIZACJA"
+                                : "LOKALIZACJA"}
+                        </h2>
                         <div className="locationContainer">
                             <IoLocationSharp /> <p>{userData.localization}</p>
                         </div>
                     </div>
                     <div className="moreInfoElement">
-                        <h2>WYMIAR PRACY</h2>
+                        <h2>
+                            {userData.accountType === "employer"
+                                ? "WYMAGANY WYMIAR PRACY"
+                                : "WYMIAR PRACY"}
+                        </h2>
                         <div className="hoursOfWorkContainer">
                             <MdWork /> <p>{userData.workingHours}</p>
                         </div>

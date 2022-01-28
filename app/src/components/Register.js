@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import Error from "./Error";
 import { db } from "../firebase";
-import { setDoc, doc, addDoc, collection } from "firebase/firestore";
+import { setDoc, doc } from "firebase/firestore";
 
 function Register() {
     let navigate = useNavigate();
@@ -95,7 +95,7 @@ function Register() {
                     surname: surname,
                     accountType: accountType,
                     description: "",
-                    image: "",
+                    imageUrl: "",
                     occupation: "",
                     technologies: [],
                     experience: "",

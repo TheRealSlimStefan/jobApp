@@ -1,17 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { db } from "../firebase";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { doc, updateDoc } from "firebase/firestore";
 import { useAuth } from "../contexts/AuthContext";
-
+import Error from "./Error";
 import "../styles/EditProfile.css";
 import Select from "react-select";
 import { AiOutlineArrowLeft } from "react-icons/ai";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function EditProfile() {
+    let [error, setError] = useState({ error: false, info: "" });
+    const navigate = useNavigate();
     // Selector options
     const workingHoursOptions = [
-        { value: "1/1 Etatu", label: "Pełen etat" },
+        { value: "Pełen etat", label: "Pełen etat" },
         { value: "1/2 Etatu", label: "1/2 Etatu" },
         { value: "3/4 Etatu", label: "3/4 Etatu" },
     ];
@@ -28,7 +30,7 @@ export default function EditProfile() {
         { value: "Warszawa", label: "Warszawa" },
     ];
     const expirienceOptions = [
-        { value: "Intern", label: "Stażysta" },
+        { value: "Stażysta", label: "Stażysta" },
         { value: "Junior", label: "Junior" },
         { value: "Mid", label: "Mid" },
         { value: "Senior", label: "Senior" },
@@ -58,20 +60,47 @@ export default function EditProfile() {
 
     // const [profileData, setProfileData] = useState({});
     const [description, setDescription] = useState("");
+    const [disabled, setDisabled] = useState(false);
     const [localization, setLocalization] = useState("");
     const [workingHours, setWorkingHours] = useState("");
     const [experience, setExperience] = useState("");
     const [occupation, setOccupation] = useState([]);
     const [technologies, setTechnologies] = useState([]);
+    const [imageUrl, setImageUrl] = useState("");
 
     // Invoking all update functions on click ApplyBnt
-    const updateProfile = (id) => {
-        updateTechnologies(id, technologies);
-        updateOccupation(id, occupation);
-        updateLocation(id, localization);
-        updateWorkingHours(id, workingHours);
-        updateExperience(id, experience);
-        updateDescription(id, description);
+    const updateProfile = async (id) => {
+        const updateUserProfile = async () => {
+            setDisabled(true);
+            await Promise.all([
+                updateTechnologies(id, technologies),
+                updateOccupation(id, occupation),
+                updateLocation(id, localization),
+                updateWorkingHours(id, workingHours),
+                updateExperience(id, experience),
+                updateDescription(id, description),
+                updateImageUrl(id, imageUrl),
+            ]);
+            setDisabled(false);
+        };
+
+        if (imageUrl !== "" && !imageUrl.match("https?://.*.(?:png|jpg)")) {
+            setError({
+                error: true,
+                info: "Niepoprawny adres url!",
+            });
+        } else {
+            updateUserProfile();
+        }
+    };
+
+    const updateImageUrl = async (id, imageUrl) => {
+        if (imageUrl !== "") {
+            const profileDoc = doc(db, "users", id);
+            const newFields = { imageUrl: imageUrl };
+            await updateDoc(profileDoc, newFields);
+            setImageUrl("");
+        }
     };
 
     const updateOccupation = async (id, occupation) => {
@@ -138,11 +167,28 @@ export default function EditProfile() {
         <div className="editProfile">
             <div className="container">
                 <div className="buttonContainer">
-                    <Link className="backBtn" to="/profile">
+                    <button
+                        disabled={disabled}
+                        className="backBtn"
+                        onClick={() => navigate("/profile")}
+                    >
                         <AiOutlineArrowLeft />
-                    </Link>
+                    </button>
                 </div>
                 <form>
+                    <div className="field">
+                        <label htmlFor="profileImg">ZDJĘCIE</label>
+                        <input
+                            type="text"
+                            name="peas"
+                            value={imageUrl}
+                            onChange={(e) => {
+                                setError({ error: false, info: "" });
+                                setImageUrl(e.target.value);
+                            }}
+                        />
+                        <Error error={error.error} info={error.info} />
+                    </div>
                     <div className="field">
                         <label htmlFor="aboutMe">O MNIE</label>
                         <textarea

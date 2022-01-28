@@ -33,12 +33,16 @@ function Chats() {
             if (userData.accountType === "employer") {
                 databaseQuery = query(
                     collection(db, "chats"),
-                    where("employerId", "==", currentUser.uid)
+                    where("employerId", "==", currentUser.uid),
+                    where("employerAgreed", "==", "true"),
+                    where("employeeAgreed", "==", "true")
                 );
             } else {
                 databaseQuery = query(
                     collection(db, "chats"),
-                    where("employeeId", "==", currentUser.uid)
+                    where("employeeId", "==", currentUser.uid),
+                    where("employerAgreed", "==", "true"),
+                    where("employeeAgreed", "==", "true")
                 );
             }
 
