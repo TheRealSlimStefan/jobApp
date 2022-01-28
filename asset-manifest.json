@@ -1,0 +1,21 @@
+{
+  "files": {
+    "main.css": "/jobApp/static/css/main.fa8954b1.chunk.css",
+    "main.js": "/jobApp/static/js/main.af13b666.chunk.js",
+    "main.js.map": "/jobApp/static/js/main.af13b666.chunk.js.map",
+    "runtime-main.js": "/jobApp/static/js/runtime-main.817d6d90.js",
+    "runtime-main.js.map": "/jobApp/static/js/runtime-main.817d6d90.js.map",
+    "static/js/2.3159549a.chunk.js": "/jobApp/static/js/2.3159549a.chunk.js",
+    "static/js/2.3159549a.chunk.js.map": "/jobApp/static/js/2.3159549a.chunk.js.map",
+    "index.html": "/jobApp/index.html",
+    "static/css/main.fa8954b1.chunk.css.map": "/jobApp/static/css/main.fa8954b1.chunk.css.map",
+    "static/js/2.3159549a.chunk.js.LICENSE.txt": "/jobApp/static/js/2.3159549a.chunk.js.LICENSE.txt",
+    "static/media/default_image_original.0c22186a.jpg": "/jobApp/static/media/default_image_original.0c22186a.jpg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.817d6d90.js",
+    "static/js/2.3159549a.chunk.js",
+    "static/css/main.fa8954b1.chunk.css",
+    "static/js/main.af13b666.chunk.js"
+  ]
+}
