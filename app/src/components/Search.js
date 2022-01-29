@@ -347,7 +347,7 @@ function Search() {
                 </button>
                 <button className="accept" onClick={() => acceptOffer()}>
                     {/* <AiOutlineArrowRight /> */}
-                    <<CgArrowRight />/>
+                    <CgArrowRight />
                 </button>
             </div>
         </div>
