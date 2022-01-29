@@ -138,7 +138,7 @@ function Search() {
             setOffersIndex((prevCount) => prevCount + 1);
     };
 
-    useEffect(async () => {
+    useEffect(() => {
         setLoading(true);
         setOffers([]);
 
@@ -231,8 +231,9 @@ function Search() {
                 });
             });
         }
-        await getOffers();
-        setLoading(false);
+        getOffers().then(() => {
+            setLoading(false);
+        });
 
         return unsubscribe;
     }, []);
@@ -252,8 +253,6 @@ function Search() {
                 <div className="loading">
                     Uzupełnij profil aby wyświetlić oferty...
                 </div>
-            ) : offers.length <= 0 ? (
-                <div className="loading">Brak ofert...</div>
             ) : offersIndex !== -1 &&
               offers.length > 0 &&
               offersIndex < offers.length ? (
@@ -339,6 +338,8 @@ function Search() {
                         </div>
                     </div>
                 </>
+            ) : offers.length <= 0 ? (
+                <div className="loading">Brak ofert...</div>
             ) : null}
             <div className="navbarAddicionalContent">
                 <button className="reject" onClick={() => rejectOffer()}>
