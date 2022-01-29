@@ -5,6 +5,7 @@ import { IoLocationSharp } from "react-icons/io5";
 import { GiSkills } from "react-icons/gi";
 import { MdWork } from "react-icons/md";
 import { AiOutlineArrowLeft, AiOutlineArrowRight } from "react-icons/ai";
+import { CgArrowLeft, CgArrowRight } from "react-icons/cg";
 import { useState, useEffect } from "react";
 import { db } from "../firebase";
 import {
@@ -341,10 +342,12 @@ function Search() {
             )}
             <div className="navbarAddicionalContent">
                 <button className="reject" onClick={() => rejectOffer()}>
-                    <AiOutlineArrowLeft />
+                    {/* <AiOutlineArrowLeft /> */}
+                    <CgArrowLeft />
                 </button>
                 <button className="accept" onClick={() => acceptOffer()}>
-                    <AiOutlineArrowRight />
+                    {/* <AiOutlineArrowRight /> */}
+                    <<CgArrowRight />/>
                 </button>
             </div>
         </div>
