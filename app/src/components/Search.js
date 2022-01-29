@@ -33,6 +33,7 @@ function Search() {
         experience: "",
         localization: "",
         workingHours: "",
+        occupation: "",
     });
 
     const acceptOffer = async () => {
@@ -137,7 +138,7 @@ function Search() {
             setOffersIndex((prevCount) => prevCount + 1);
     };
 
-    useEffect(() => {
+    useEffect(async () => {
         setLoading(true);
         setOffers([]);
 
@@ -179,23 +180,35 @@ function Search() {
                 });
             }
 
-            if (userData.accountType === "employer") {
+            if (
+                userData.accountType === "employer" &&
+                userData.technologies.length
+            ) {
                 databaseQuery = query(
                     collection(db, "users"),
                     where("accountType", "==", "employee"),
                     where("experience", "==", userData.experience),
                     where("localization", "==", userData.localization),
                     where("occupation", "==", userData.occupation),
-                    where("workingHours", "==", userData.workingHours)
+                    where("workingHours", "==", userData.workingHours),
+                    where("technologies", "array-contains-any", [
+                        ...userData.technologies,
+                    ])
                 );
-            } else {
+            } else if (
+                userData.accountType === "employee" &&
+                userData.technologies.length
+            ) {
                 databaseQuery = query(
                     collection(db, "users"),
                     where("accountType", "==", "employer"),
                     where("experience", "==", userData.experience),
                     where("localization", "==", userData.localization),
                     where("occupation", "==", userData.occupation),
-                    where("workingHours", "==", userData.workingHours)
+                    where("workingHours", "==", userData.workingHours),
+                    where("technologies", "array-contains-any", [
+                        ...userData.technologies,
+                    ])
                 );
             }
 
@@ -215,11 +228,11 @@ function Search() {
                             },
                         ]);
                     }
-                    setLoading(false);
                 });
             });
         }
-        getOffers();
+        await getOffers();
+        setLoading(false);
 
         return unsubscribe;
     }, []);
@@ -228,118 +241,105 @@ function Search() {
 
     return (
         <div className="Search">
-            {loading === false &&
-            (currentUserData.experience === "" ||
-                currentUserData.description === "" ||
-                currentUserData.localization === "" ||
-                currentUserData.occupation === "" ||
-                currentUserData.technologies.length === 0 ||
-                currentUserData.workingHours === "") ? (
+            {loading === true ? (
+                <div className="loading">Ładuję...</div>
+            ) : currentUserData.experience === "" ||
+              currentUserData.description === "" ||
+              currentUserData.localization === "" ||
+              currentUserData.occupation === "" ||
+              currentUserData.technologies.length === 0 ||
+              currentUserData.workingHours === "" ? (
                 <div className="loading">
                     Uzupełnij profil aby wyświetlić oferty...
                 </div>
-            ) : (
+            ) : offers.length <= 0 ? (
+                <div className="loading">Brak ofert...</div>
+            ) : offersIndex !== -1 &&
+              offers.length > 0 &&
+              offersIndex < offers.length ? (
                 <>
-                    {offersIndex !== -1 &&
-                    offers.length > 0 &&
-                    offersIndex < offers.length ? (
-                        <>
-                            <div className="imageContainer">
-                                <img
-                                    src={
-                                        offers[offersIndex].imageUrl === ""
-                                            ? profileImg
-                                            : offers[offersIndex].imageUrl
-                                    }
-                                    alt=""
-                                />
+                    <div className="imageContainer">
+                        <img
+                            src={
+                                offers[offersIndex].imageUrl === ""
+                                    ? profileImg
+                                    : offers[offersIndex].imageUrl
+                            }
+                            alt=""
+                        />
+                    </div>
+                    <div className="infoContainer">
+                        <p>
+                            {offers[offersIndex].name}{" "}
+                            {offers[offersIndex].surname}
+                        </p>
+                        <p>
+                            {offers[offersIndex].accountType === "employer"
+                                ? `STANOWISKO: ${offers[offersIndex].occupation}`
+                                : `${offers[offersIndex].occupation}`}
+                        </p>
+                    </div>
+                    <div className="moreInfoContainer">
+                        <div className="moreInfoElement">
+                            <h2>
+                                {currentUserData.accountType === "employee"
+                                    ? "O FIRMIE"
+                                    : "O MNIE"}
+                            </h2>
+                            <p>{offers[offersIndex].description}</p>
+                        </div>
+                        <div className="moreInfoElement">
+                            <h2>
+                                {currentUserData.accountType === "employee"
+                                    ? "WYMAGANE TECHNOLOGIE"
+                                    : "TECHNOLOGIE"}
+                            </h2>
+                            <div className="technologiesContainer">
+                                {offers[offersIndex].technologies.map(
+                                    (technology) => (
+                                        <div className="technology">
+                                            {technology}
+                                        </div>
+                                    )
+                                )}
                             </div>
-                            <div className="infoContainer">
-                                <p>
-                                    {offers[offersIndex].name}{" "}
-                                    {offers[offersIndex].surname}
-                                </p>
-                                <p>
-                                    {offers[offersIndex].accountType ===
-                                    "employer"
-                                        ? `STANOWISKO: ${offers[offersIndex].occupation}`
-                                        : `${offers[offersIndex].occupation}`}
-                                </p>
+                        </div>
+                        <div className="moreInfoElement">
+                            <h2>
+                                {currentUserData.accountType === "employee"
+                                    ? "WYMAGANE DOŚWIADCZENIE"
+                                    : "DOŚWIADCZENIE"}
+                            </h2>
+                            <div className="skillLevelContainer">
+                                <GiSkills />{" "}
+                                <p>{offers[offersIndex].experience}</p>
                             </div>
-                            <div className="moreInfoContainer">
-                                <div className="moreInfoElement">
-                                    <h2>
-                                        {currentUserData.accountType ===
-                                        "employee"
-                                            ? "O FIRMIE"
-                                            : "O MNIE"}
-                                    </h2>
-                                    <p>{offers[offersIndex].description}</p>
-                                </div>
-                                <div className="moreInfoElement">
-                                    <h2>
-                                        {currentUserData.accountType ===
-                                        "employee"
-                                            ? "WYMAGANE TECHNOLOGIE"
-                                            : "TECHNOLOGIE"}
-                                    </h2>
-                                    <div className="technologiesContainer">
-                                        {offers[offersIndex].technologies.map(
-                                            (technology) => (
-                                                <div className="technology">
-                                                    {technology}
-                                                </div>
-                                            )
-                                        )}
-                                    </div>
-                                </div>
-                                <div className="moreInfoElement">
-                                    <h2>
-                                        {currentUserData.accountType ===
-                                        "employee"
-                                            ? "WYMAGANE DOŚWIADCZENIE"
-                                            : "DOŚWIADCZENIE"}
-                                    </h2>
-                                    <div className="skillLevelContainer">
-                                        <GiSkills />{" "}
-                                        <p>{offers[offersIndex].experience}</p>
-                                    </div>
-                                </div>
-                                <div className="moreInfoElement">
-                                    <h2>
-                                        {currentUserData.accountType ===
-                                        "employee"
-                                            ? "WYMAGANA LOKALIZACJA"
-                                            : "LOKALIZACJA"}
-                                    </h2>
-                                    <div className="locationContainer">
-                                        <IoLocationSharp />{" "}
-                                        <p>
-                                            {offers[offersIndex].localization}
-                                        </p>
-                                    </div>
-                                </div>
-                                <div className="moreInfoElement">
-                                    <h2>
-                                        {currentUserData.accountType ===
-                                        "employee"
-                                            ? "WYMAGANY WYMIAR PRACY"
-                                            : "WYMIAR PRACY"}
-                                    </h2>
-                                    <div className="hoursOfWorkContainer">
-                                        <MdWork />{" "}
-                                        <p>
-                                            {offers[offersIndex].workingHours}
-                                        </p>
-                                    </div>
-                                </div>
+                        </div>
+                        <div className="moreInfoElement">
+                            <h2>
+                                {currentUserData.accountType === "employee"
+                                    ? "WYMAGANA LOKALIZACJA"
+                                    : "LOKALIZACJA"}
+                            </h2>
+                            <div className="locationContainer">
+                                <IoLocationSharp />{" "}
+                                <p>{offers[offersIndex].localization}</p>
                             </div>
-                        </>
-                    ) : (
-                        <div className="loading">Brak ofert...</div>
-                    )}
+                        </div>
+                        <div className="moreInfoElement">
+                            <h2>
+                                {currentUserData.accountType === "employee"
+                                    ? "WYMAGANY WYMIAR PRACY"
+                                    : "WYMIAR PRACY"}
+                            </h2>
+                            <div className="hoursOfWorkContainer">
+                                <MdWork />{" "}
+                                <p>{offers[offersIndex].workingHours}</p>
+                            </div>
+                        </div>
+                    </div>
                 </>
-            )}
+            ) : null}
             <div className="navbarAddicionalContent">
                 <button className="reject" onClick={() => rejectOffer()}>
                     {/* <AiOutlineArrowLeft /> */}
@@ -355,6 +355,123 @@ function Search() {
 }
 
 export default Search;
+
+// {loading === false &&
+//     (currentUserData.experience === "" ||
+//         currentUserData.description === "" ||
+//         currentUserData.localization === "" ||
+//         currentUserData.occupation === "" ||
+//         currentUserData.technologies.length === 0 ||
+//         currentUserData.workingHours === "") ? (
+//         <div className="loading">
+//             Uzupełnij profil aby wyświetlić oferty...
+//         </div>
+//     ) : (
+//         <>
+//             {offersIndex !== -1 &&
+//             offers.length > 0 &&
+//             offersIndex < offers.length ? (
+//                 <>
+//                     <div className="imageContainer">
+//                         <img
+//                             src={
+//                                 offers[offersIndex].imageUrl === ""
+//                                     ? profileImg
+//                                     : offers[offersIndex].imageUrl
+//                             }
+//                             alt=""
+//                         />
+//                     </div>
+//                     <div className="infoContainer">
+//                         <p>
+//                             {offers[offersIndex].name}{" "}
+//                             {offers[offersIndex].surname}
+//                         </p>
+//                         <p>
+//                             {offers[offersIndex].accountType ===
+//                             "employer"
+//                                 ? `STANOWISKO: ${offers[offersIndex].occupation}`
+//                                 : `${offers[offersIndex].occupation}`}
+//                         </p>
+//                     </div>
+//                     <div className="moreInfoContainer">
+//                         <div className="moreInfoElement">
+//                             <h2>
+//                                 {currentUserData.accountType ===
+//                                 "employee"
+//                                     ? "O FIRMIE"
+//                                     : "O MNIE"}
+//                             </h2>
+//                             <p>{offers[offersIndex].description}</p>
+//                         </div>
+//                         <div className="moreInfoElement">
+//                             <h2>
+//                                 {currentUserData.accountType ===
+//                                 "employee"
+//                                     ? "WYMAGANE TECHNOLOGIE"
+//                                     : "TECHNOLOGIE"}
+//                             </h2>
+//                             <div className="technologiesContainer">
+//                                 {offers[offersIndex].technologies.map(
+//                                     (technology) => (
+//                                         <div className="technology">
+//                                             {technology}
+//                                         </div>
+//                                     )
+//                                 )}
+//                             </div>
+//                         </div>
+//                         <div className="moreInfoElement">
+//                             <h2>
+//                                 {currentUserData.accountType ===
+//                                 "employee"
+//                                     ? "WYMAGANE DOŚWIADCZENIE"
+//                                     : "DOŚWIADCZENIE"}
+//                             </h2>
+//                             <div className="skillLevelContainer">
+//                                 <GiSkills />{" "}
+//                                 <p>{offers[offersIndex].experience}</p>
+//                             </div>
+//                         </div>
+//                         <div className="moreInfoElement">
+//                             <h2>
+//                                 {currentUserData.accountType ===
+//                                 "employee"
+//                                     ? "WYMAGANA LOKALIZACJA"
+//                                     : "LOKALIZACJA"}
+//                             </h2>
+//                             <div className="locationContainer">
+//                                 <IoLocationSharp />{" "}
+//                                 <p>
+//                                     {offers[offersIndex].localization}
+//                                 </p>
+//                             </div>
+//                         </div>
+//                         <div className="moreInfoElement">
+//                             <h2>
+//                                 {currentUserData.accountType ===
+//                                 "employee"
+//                                     ? "WYMAGANY WYMIAR PRACY"
+//                                     : "WYMIAR PRACY"}
+//                             </h2>
+//                             <div className="hoursOfWorkContainer">
+//                                 <MdWork />{" "}
+//                                 <p>
+//                                     {offers[offersIndex].workingHours}
+//                                 </p>
+//                             </div>
+//                         </div>
+//                     </div>
+//                 </>
+//             ) : null}
+//         </>
+//     )}
+
+// loading === false ? (
+//     <div className="loading">Brak ofert...</div>
+// ) : (
+//     <div className="loading">Ładuję...</div>
+// )
 
 //potrzebna optymalizacja
 // if (userData.accountType === "employer") {
